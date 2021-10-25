@@ -9,10 +9,8 @@ import time
 from scipy.stats import chi2_contingency, ttest_ind ,chisquare, kruskal, pearsonr
 
 
-
 def dateparse(time_in_secs):
     return pd.to_datetime(time_in_secs, unit='s')
-
 
 
 def load_csv():
@@ -23,11 +21,9 @@ def load_csv():
     return dataset
 
 
-
 def filter_by_language(my_dataset, language_list):
     new_dataset = my_dataset[my_dataset['language'].isin(language_list)]
     return new_dataset
-
 
 
 def funny_percentage(dataset):
@@ -37,18 +33,19 @@ def funny_percentage(dataset):
     return(my_percentage)
 
 
-
 def helpful_percentage(dataset):
     num_helpful_votes = dataset[dataset['votes_helpful'] != 0].shape[0]
     num_total_entries = dataset.shape[0]
     my_percentage = num_helpful_votes / num_total_entries
     return(my_percentage)
 
+
 def received_for_free_percentage(dataset):
     num_frees = dataset[dataset['received_for_free'] == True].shape[0]
     num_total_entries = dataset.shape[0]
     my_percentage = num_frees / num_total_entries
     return(my_percentage)
+
 
 def steam_purchase_percentage(dataset):
     num_purchases = dataset[dataset['steam_purchase'] == True].shape[0]
@@ -84,30 +81,8 @@ def weighted_vote_score_percentage(dataset, threshold = 0.5):
         my_percentage = new_ds.shape[0] / dataset.shape[0]
         return(my_percentage)
     
+    
 def funny_vote_given_score(dataset, threshold = 0.5):
     new_ds = dataset[dataset['weighted_vote_score'] > threshold]
     return(funny_percentage(new_ds))
-    
- 
-    
-    
-    
-  
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
