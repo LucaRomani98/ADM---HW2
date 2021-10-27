@@ -3,7 +3,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-import datetime as dt
+from datetime import datetime
 import time
 
 from scipy.stats import chi2_contingency, ttest_ind ,chisquare, kruskal, pearsonr
@@ -12,13 +12,32 @@ from scipy.stats import chi2_contingency, ttest_ind ,chisquare, kruskal, pearson
 def dateparse(time_in_secs):
     return pd.to_datetime(time_in_secs, unit='s')
 
-
 def load_csv():
+    
+    fields = ['app_name','language','timestamp_created', 'timestamp_updated', 'recommended',
+              'votes_helpful', 'votes_funny', 'weighted_vote_score','steam_purchase',
+              'received_for_free','author.steamid']
+    
     dataset = pd.read_csv('steam_reviews.csv', header='infer',
-    parse_dates=['timestamp_created',
-    'timestamp_updated', 'author.last_played'],
-    date_parser=dateparse)
+                            usecols = fields,
+                            parse_dates=['timestamp_created',
+                            'timestamp_updated'],
+                            date_parser=dateparse)
     return dataset
+
+    
+def custom_time_intervals():
+    intervals = [
+    ( datetime.strptime('06:00:00', "%H:%M:%S"), datetime.strptime('10:59:59', "%H:%M:%S") ),
+    ( datetime.strptime('11:00:00', "%H:%M:%S"), datetime.strptime('16:59:59', "%H:%M:%S") ),
+    ( datetime.strptime('14:00:00', "%H:%M:%S"), datetime.strptime('16:59:59', "%H:%M:%S") ), 
+    ( datetime.strptime('17:00:00', "%H:%M:%S"), datetime.strptime('19:59:59', "%H:%M:%S") ),
+    ( datetime.strptime('20:00:00', "%H:%M:%S"), datetime.strptime('23:59:59', "%H:%M:%S") ),
+    ( datetime.strptime('00:00:00', "%H:%M:%S"), datetime.strptime('02:59:59', "%H:%M:%S") ),
+    ( datetime.strptime('03:00:00', "%H:%M:%S"), datetime.strptime('05:59:59', "%H:%M:%S") )]
+    
+    return intervals
+
 
 
 def filter_by_language(my_dataset, language_list):
