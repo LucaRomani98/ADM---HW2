@@ -21,23 +21,32 @@ def load_csv():
     dataset = pd.read_csv('steam_reviews.csv', header='infer',
                             usecols = fields,
                             parse_dates=['timestamp_created',
-                            'timestamp_updated'],
-                            date_parser=dateparse)
+                            'timestamp_updated'], date_parser=dateparse)
     return dataset
 
     
 def custom_time_intervals():
     intervals = [
-    ( datetime.strptime('06:00:00', "%H:%M:%S"), datetime.strptime('10:59:59', "%H:%M:%S") ),
-    ( datetime.strptime('11:00:00', "%H:%M:%S"), datetime.strptime('16:59:59', "%H:%M:%S") ),
-    ( datetime.strptime('14:00:00', "%H:%M:%S"), datetime.strptime('16:59:59', "%H:%M:%S") ), 
-    ( datetime.strptime('17:00:00', "%H:%M:%S"), datetime.strptime('19:59:59', "%H:%M:%S") ),
-    ( datetime.strptime('20:00:00', "%H:%M:%S"), datetime.strptime('23:59:59', "%H:%M:%S") ),
-    ( datetime.strptime('00:00:00', "%H:%M:%S"), datetime.strptime('02:59:59', "%H:%M:%S") ),
-    ( datetime.strptime('03:00:00', "%H:%M:%S"), datetime.strptime('05:59:59', "%H:%M:%S") )]
+    ( datetime.strptime('06:00:00', "%H:%M:%S").time(), datetime.strptime('10:59:59', "%H:%M:%S").time()),
+    ( datetime.strptime('11:00:00', "%H:%M:%S").time(), datetime.strptime('13:59:59', "%H:%M:%S").time()),
+    ( datetime.strptime('14:00:00', "%H:%M:%S").time(), datetime.strptime('16:59:59', "%H:%M:%S").time()), 
+    ( datetime.strptime('17:00:00', "%H:%M:%S").time(), datetime.strptime('19:59:59', "%H:%M:%S").time()),
+    ( datetime.strptime('20:00:00', "%H:%M:%S").time(), datetime.strptime('23:59:59', "%H:%M:%S").time()),
+    ( datetime.strptime('00:00:00', "%H:%M:%S").time(), datetime.strptime('02:59:59', "%H:%M:%S").time()),
+    ( datetime.strptime('03:00:00', "%H:%M:%S").time(), datetime.strptime('05:59:59', "%H:%M:%S").time())]
     
     return intervals
 
+
+def divide_and_plot(dataset, intervals):
+    df = pd.DataFrame()
+    df['time'] = dataset['timestamp_created'].apply(lambda x : x.time())
+    n = []
+    for (start,end) in intervals:
+        n.append(len(df.loc[(df['time'] > start) & (df['time'] < end)]))
+    bar_plot = pd.DataFrame({'Time Interval' : intervals, 'Number of Reviews' : n})
+    bar_plot.plot(x ='Time Interval', y = 'Number of Reviews', kind = 'bar')
+    return
 
 
 def filter_by_language(my_dataset, language_list):
